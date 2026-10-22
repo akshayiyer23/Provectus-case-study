@@ -1,0 +1,69 @@
+nugs.net: Cutting Platform Costs 80% and Opening a Path to AI Self-Service
+
+nugs.net, a live-music streaming company, moved to Databricks and dbt, cut batch processing from 16 hours to under one, and gave analysts ownership of reporting. Built-in AI opens the next step: helping analysts develop models and business users explore data themselves.
+
+Client profile: A live-music streaming company
+Industry: Music & Entertainment
+Region: North America
+
+80% lower platform cost
+<1 hr full pipeline run, down from 12 to 16 hours
+
+nugs.net streams tens of thousands of official live concerts, alongside exclusive livestreams of new shows as they happen. Playback events, subscriptions, catalogue and billing data all fed one Azure SQL warehouse that supported the company's reporting.
+
+01 The Challenge
+Slow Data, High Costs, and Every Change Waiting on Two Engineers
+
+The platform cost about $10,000 a month, yet its 12- to 16-hour batch allowed only one refresh a day. Most pipelines reloaded all their data nightly. Decisions on live-event performance, churn and marketing spend used day-old numbers; a failed run meant no fresh data that day.
+
+Ten years of business logic spanned 118 Azure Data Factory pipelines and 164 stored procedures. Procedures edited directly in the database drifted from the repository, and there was no test environment with real data. A one-column change could silently break a downstream report.
+
+Two engineers held the knowledge needed to maintain it all. Analysts understood the business questions but could not change the reporting logic themselves. Every request joined the same engineering queue.
+
+12 to 16 hours nightly batch window. One refresh a day; a failed run meant no data that day.
+
+02 The Approach
+Why the Platform Needed a New Architecture
+
+Provectus recommended replacing the architecture: more compute could shorten runs, but it would leave the fragile change process and dependence on two engineers intact.
+
+Databricks provides the lakehouse, ingestion capabilities and shared governance. dbt makes each transformation a SQL file with tests, documentation and explicit dependencies. Together, they let the team process new data incrementally, review changes in version control and open development to analysts who already know SQL.
+
+Analysts Build Models; Business Users Ask Questions
+
+The platform supports two paths to AI-powered self-service. Analysts can use Databricks Assistant to draft SQL models, tests and column descriptions from a plain-language brief, or explain legacy SQL. They can then validate those changes against production-sized data through the same review process as engineers.
+
+Business users can use AI/BI Genie to ask questions in plain language against governed tables. Documented columns and data lineage give users context for checking the answers. Engineers maintain ingestion, permissions, tests and the review process that support both paths.
+
+03 The Build
+Building a Databricks Lakehouse with Tested, Version-Controlled dbt Models
+
+Native ingestion and managed connectors handle Kafka, operational databases and SaaS sources. Custom feeds became Python models inside dbt, keeping them in the same repository and dependency graph without adding a separate ingestion framework.
+
+297 dbt models replaced 164 stored procedures and 17 visual data flows. Automated tests check uniqueness, relationships and business rules before changes reach production. About 2,900 column definitions live beside the SQL and are reviewed with it, giving developers and AI tools shared context for interpreting the data.
+
+Every engineer and analyst gets a private development environment for each branch, using Databricks shallow clones. These reuse the existing data files, avoiding the storage cost of a full duplicate. Teams can test a change against the full production dataset and submit it for review without affecting live reports.
+
+Compute also stops after one minute idle instead of five. That setting alone recovered 30 to 40% of warehouse spend.
+
+Migrating in Stages While Keeping Reports Running
+
+Telemetry, playback, subscriptions and billing moved independently. Both platforms ran in parallel while the team reconciled each group's outputs row by row. The BI layer connected directly to both the SQL warehouse and the Databricks lakehouse as the groups moved.
+
+Each group cut over after reconciliation, and its legacy trigger was switched off. Business logic stayed frozen during reconciliation, with inconsistencies logged for later fixes so both systems could be compared on the same basis.
+
+04 The Results
+80% Lower Costs, Hourly Critical Flows, and Analyst-Owned Reporting
+
+Platform cost fell from about $10,000 to about $2,000 a month on the same workload, returning roughly $96,000 a year. The full pipeline run went from 12 to 16 hours to under an hour. Critical flows moved from once a day to hourly.
+
+Analysts now own the reporting layer and can develop changes alongside engineers. Business logic and documentation live in a shared repository, reducing reliance on the two people who maintained the old platform. The savings paid for the migration inside the first year.
+
+05 What's Next
+Expanding Self-Service Analytics and Business Experiments
+
+The next step is wider adoption of AI-assisted model development and natural-language analytics through Genie. Analyst ownership is already in place; extending these capabilities across business teams is the next phase.
+
+Teams can use the platform to test hypotheses about churn, live-event performance or campaign response against production-sized data. New sources can be added through connectors and dbt models, making it easier to explore a question before committing to a new report.
+
+Provectus has also worked with nugs.net on personalization: its AI recommendation engine lifted retention by 40% among users who engage with recommendations and doubled trial-to-paid conversion.
